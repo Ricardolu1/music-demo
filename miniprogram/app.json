@@ -3,7 +3,9 @@
     "pages/playList/playList",
     "pages/blog/blog",
     "pages/profile/profile",
-    "pages/demo/demo"
+    "pages/demo/demo",
+    "pages/musicList/musicList",
+    "pages/player/player"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
@@ -12,6 +14,9 @@
     "navigationBarTitleText": "音乐",
     "navigationBarTextStyle": "white"
   },
+  "requiredBackgroundModes": [
+    "audio"
+  ],
   "tabBar": {
     "color": "#474747",
     "selectedColor": "#d43c43",

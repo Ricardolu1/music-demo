@@ -85,11 +85,11 @@ Page({
     wx.cloud.callFunction({
       name: 'music',
       data: {
+        $url:'playList', //这份值就是router后面的那个名称
         start: this.data.playList.length,
         count: MAX_LIMIT
       }
     }).then(res => {
-      console.log(res)
       this.setData({
         playList: this.data.playList.concat(res.result.data)
       })

@@ -36,6 +36,12 @@ Component({
         let decimal = numStr.substring(numStr.length-8, numStr.length-8+ point)
         return parseFloat(parseInt(num / 10000000) + '.' + decimal) + '亿'
       }
+    },
+    goToMusicList(){
+      wx.navigateTo({
+        url: `../../pages/musicList/musicList?playListId=${this.properties.playList.id}`,
+      })
+      console.log(this.properties.playList.id)
     }
   }
 })

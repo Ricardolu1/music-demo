@@ -1,0 +1,14 @@
+<view class="player-container" style="background:url({{picUrl}}) center/cover no-repeat;"></view>
+<view class="play-mask"></view>
+
+<view class="player-info">
+  <view class="player-disc {{isPlaying?'play':''}}">
+    <image class="playerImg imgRotation {{isPlaying?'':'rotation-paused'}}" src="{{picUrl}}"></image>
+  </view>
+</view>
+
+<view class="control">
+  <text class="iconfont icon-shangyishoushangyige" bindtap="onPrev"></text>
+  <text class="iconfont {{isPlaying?'icon-zanting':'icon-bofang'}}" bindtap="togglePlaying"></text>
+  <text class="iconfont icon-xiayigexiayishou" bindtap="onNext"></text>
+</view>
