@@ -25,6 +25,7 @@ Page({
   },
 
   _loadMusicDetail(musicId){
+    backgroundAudioManager.stop()
     let music = musicList[nowPlayingIndex]
     console.log(music)
     wx.setNavigationBarTitle({

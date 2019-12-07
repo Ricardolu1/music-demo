@@ -9,7 +9,7 @@
   opacity: 0.5;
   z-index:-1;
 }
-.player-mask{
+.play-mask{
   position: absolute;
   top:0;
   left: 0;
@@ -35,7 +35,7 @@
   bottom: 0;
 }
 .play.player-disc::after{
-  transform: rotate(0deg);
+  transform: rotate(2deg);
 }
 .player-disc::after{
   content:'';
@@ -45,7 +45,7 @@
   top:-144rpx;
   left:266rpx;
   background: url("https://s3.music.126.net/m/s/img/needle.png?702cf6d95f29e2e594f53a3caab50e12") no-repeat center/contain;
-  transform:rotate(-15deg);
+  transform:rotate(-30deg);
   transform-origin: 24rpx 10rpx;
   transition: transform .5s ease;
 }
@@ -87,7 +87,7 @@
   align-items:center;
 }
 .control .iconfont{
-  color: #D43C33;
+  color: #fefefe;
 }
 .icon-shangyishoushangyige,.icon-xiayigexiayishou{
   font-size: 80rpx;
@@ -95,4 +95,11 @@
 .icon-bofang,.icon-zanting{
   font-size: 140rpx;
   margin: 0 50rpx;
+}
+.progress-bar{
+  width:90%;
+  position: absolute;
+  left:50%;
+  transform: translateX(-50%);
+  bottom: 24%;
 }
