@@ -41,7 +41,6 @@ Component({
         this.data.movableDis = event.detail.x
         isMoving = true
       }
-      console.log('change',isMoving)
     },
     onTouchEnd(){
       const currentTimeFmt =this. _dateFormat(parseInt(backgroundAudioManager.currentTime)) 
@@ -59,10 +58,10 @@ Component({
       query.select('.movable-area').boundingClientRect()
       query.select('.movable-view').boundingClientRect()
       query.exec(rect=>{
-        console.log(rect)
+        
         movableAreaWidth = rect[0].width
         movableViewWidth = rect[1].width
-        console.log(movableAreaWidth, movableViewWidth)
+        
       })
     },
     _bindBGMEvent(){
@@ -86,6 +85,7 @@ Component({
         }else{ //当前音乐的总时长
           setTimeout(()=>{
             this._setTime()
+            console.log(backgroundAudioManager.duration)
           },1000)
         }
       }),
@@ -103,20 +103,20 @@ Component({
               "showTime.currentTime": `${currentTimeFmt.min}:${currentTimeFmt.sec}`
             })
             currentSec = parseInt(currentTime)
+            this.triggerEvent('timeUpdate',{
+              currentTime
+            })
           }
         } 
       }),
       backgroundAudioManager.onPlay(()=>{
-        console.log('onPlay')
         isMoving = false
       }),
       backgroundAudioManager.onEnded(()=>{
-        console.log('onEnded') //当我们播放完当前歌曲，是不是需要自动进入下一首歌曲，我们就会用到这个事件
+         //当我们播放完当前歌曲，是不是需要自动进入下一首歌曲，我们就会用到这个事件
         this.triggerEvent('musicEnd')
       }),
       backgroundAudioManager.onError((res)=>{
-        console.log(res.errMsg) 
-        console.log(res.errCode) 
         wx.showToast({
           title: '错误'+res.errCode,
         })
@@ -124,9 +124,7 @@ Component({
     },
     _setTime(){
       duration = backgroundAudioManager.duration//是一个以秒为单位的时间
-      console.log(duration)
       const durationFmt = this._dateFormat(duration)
-      console.log(durationFmt)
       this.setData({
         "showTime.totalTime":`${durationFmt.min}:${durationFmt.sec}`
       })

@@ -4,6 +4,8 @@ let musicList =[]
 let nowPlayingIndex = 0
 //获取全局唯一的背景音频管理器
 const backgroundAudioManager = wx.getBackgroundAudioManager()
+
+const app = getApp() //小程序自带的方法
 Page({
 
   /**
@@ -11,14 +13,15 @@ Page({
    */
   data: {
     picUrl:"",
-    isPlaying:false //true表示播放
+    isPlaying: false,//true表示播放
+    isLyricShow:false, //表示当前歌词是否显示
+    lyric:''
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    console.log(options)
     musicList = wx.getStorageSync("musicList")
     nowPlayingIndex = parseInt(options.index)
     this._loadMusicDetail(options.musicId)
@@ -35,8 +38,12 @@ Page({
       picUrl:music.al.picUrl,
       isPlaying:false
     })
+    app.setPlayingMusicId(musicId)
+
+    console.log(app.globalData.playingMusicId)
+    console.log(app.getPlayingMusicId())
     wx.showLoading({
-      title: '加载中',
+      title: '歌曲加载中',
     })
     wx.cloud.callFunction({
       name:'music',//哪一个云函数
@@ -55,8 +62,25 @@ Page({
           isPlaying:true
         })
         wx.hideLoading()
+        //加载歌词
+        console.log(musicId)
+        wx.cloud.callFunction({
+          name:'music',
+          data:{
+            musicId,
+            $url:'lyric'
+          }
+        }).then(res=>{
+          let lyric = '暂无歌词'
+          const lrc = JSON.parse(res.result).lrc
+          if(lrc){
+            lyric = lrc.lyric
+          }
+          this.setData({
+            lyric
+          })
+        })
       })  
-
 
   },
   togglePlaying(){
@@ -85,7 +109,14 @@ Page({
     }
     this._loadMusicDetail(musicList[nowPlayingIndex].id)
   },
-
+  onChangeLyricShow(){
+    this.setData({
+      isLyricShow:!this.data.isLyricShow
+    })
+  },
+  timeUpdate(event){
+    this.selectComponent('.lyric').update(event.detail.currentTime) //update需要事先在lyric组件中定义好
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

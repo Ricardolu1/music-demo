@@ -27,6 +27,10 @@ exports.main = async (event, context) => {
     ctx.body = await rp(BASE_URL+`/song/url?id=${event.musicId}`)
           .then(res=>res)
   })
+  app.router('lyric',async (ctx , next)=>{
+    ctx.body = await rp(BASE_URL+`/lyric?id=${event.musicId}`)
+      .then(res => res)
+  })
   return app.serve()
 
 }

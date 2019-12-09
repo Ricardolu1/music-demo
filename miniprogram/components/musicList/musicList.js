@@ -1,4 +1,5 @@
 // components/musicList/musicList.js
+const app = getApp()
 Component({
   /**
    * 组件的属性列表
@@ -12,6 +13,14 @@ Component({
    */
   data: {
     playingId: -1
+  },
+  pageLifetimes:{
+    show() {
+      let playingId = parseInt(app.getPlayingMusicId())
+      this.setData({
+        playingId,
+      })
+    }
   },
 
   /**
@@ -27,7 +36,7 @@ Component({
       })
       wx.navigateTo({
         url: `../../pages/player/player?musicId=${musicid}&index=${index}`,
-      })
+      }) //这可能是一个异步的,应该就是一个异步的
     }
   }
 })
