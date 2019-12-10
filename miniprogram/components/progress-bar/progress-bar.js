@@ -10,7 +10,7 @@ Component({
    * 组件的属性列表
    */
   properties: {
-
+    isSame:Boolean
   },
 
   /**
@@ -25,7 +25,11 @@ Component({
     progress:0
   },
   lifetimes:{
-    ready(){//组件在页面布局完成以后去执行，得在dom渲染完成以后再去获取dom节点的一些信息
+    ready(){
+      if (this.properties.isSame && this.data.showTime.totalTime ==="00:00"){
+        this._setTime()
+      }
+      //组件在页面布局完成以后去执行，得在dom渲染完成以后再去获取dom节点的一些信息
       this._getMovavleDis()
       this._bindBGMEvent()
     },
@@ -64,21 +68,20 @@ Component({
         
       })
     },
+
     _bindBGMEvent(){
-      backgroundAudioManager.onPlay(()=>{
-        console.log('onPlay')
-      }),
       backgroundAudioManager.onStop(()=>{
         console.log('onStop')
       }),
       backgroundAudioManager.onPause(()=>{
         console.log('onPause')
+        this.triggerEvent('musicPause')
       }),
       backgroundAudioManager.onWaiting(()=>{
         console.log('onWaiting') //监听音频加载中事件。当音频因为数据不足，需要停下来加载时会触发
       }),
       backgroundAudioManager.onCanplay(()=>{
-        console.log('onCanplay') //监听的音乐进入到一个可以播放的状态,这是获取时长
+        console.log('onCanplay') //监听的音乐进入到一个可以播放的状态,这时候获取时长
         console.log(backgroundAudioManager.duration) //获取到是个概率事件，有时会undefined,但是等一秒好像又能获取到
         if (typeof backgroundAudioManager.duration!=="undefined"){
           this._setTime()
@@ -110,6 +113,8 @@ Component({
         } 
       }),
       backgroundAudioManager.onPlay(()=>{
+        console.log('onPlay')
+        this.triggerEvent('musicPlay')
         isMoving = false
       }),
       backgroundAudioManager.onEnded(()=>{
@@ -122,6 +127,7 @@ Component({
         })
       })
     },
+
     _setTime(){
       duration = backgroundAudioManager.duration//是一个以秒为单位的时间
       const durationFmt = this._dateFormat(duration)
@@ -129,6 +135,7 @@ Component({
         "showTime.totalTime":`${durationFmt.min}:${durationFmt.sec}`
       })
     },
+
     //格式化时间
     _dateFormat(sec){
       

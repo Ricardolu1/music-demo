@@ -15,7 +15,8 @@ Page({
     picUrl:"",
     isPlaying: false,//true表示播放
     isLyricShow:false, //表示当前歌词是否显示
-    lyric:''
+    lyric:'',
+    isSame:false //表示是否点击的是同一首歌曲
   },
 
   /**
@@ -28,7 +29,18 @@ Page({
   },
 
   _loadMusicDetail(musicId){
-    backgroundAudioManager.stop()
+    if(musicId===app.getPlayingMusicId()){
+      this.setData({
+        isSame:true,
+      })
+    }else{
+      this.setData({
+        isSame: false,
+      })
+    }
+    if(!this.data.isSame){
+      backgroundAudioManager.stop()
+    }
     let music = musicList[nowPlayingIndex]
     console.log(music)
     wx.setNavigationBarTitle({
@@ -39,9 +51,6 @@ Page({
       isPlaying:false
     })
     app.setPlayingMusicId(musicId)
-
-    console.log(app.globalData.playingMusicId)
-    console.log(app.getPlayingMusicId())
     wx.showLoading({
       title: '歌曲加载中',
     })
@@ -54,10 +63,12 @@ Page({
     }).then(res=>{
         console.log(JSON.parse(res.result))
         let result = JSON.parse(res.result)
-        backgroundAudioManager.src=result.data[0].url
-        backgroundAudioManager.title = music.name
-        backgroundAudioManager.coverImgUrl = music.al.picUrl
-        backgroundAudioManager.singer = music.ar[0].name
+        if(!this.data.isSame){
+          backgroundAudioManager.src=result.data[0].url
+          backgroundAudioManager.title = music.name
+          backgroundAudioManager.coverImgUrl = music.al.picUrl
+          backgroundAudioManager.singer = music.ar[0].name
+        }
         this.setData({
           isPlaying:true
         })
@@ -116,6 +127,16 @@ Page({
   },
   timeUpdate(event){
     this.selectComponent('.lyric').update(event.detail.currentTime) //update需要事先在lyric组件中定义好
+  },
+  onPlay(){
+    this.setData({
+      isPlaying:true
+    })
+  },
+  onPause(){
+    this.setData({
+      isPlaying: false
+    })
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
