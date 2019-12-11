@@ -26,11 +26,13 @@ Component({
   },
   lifetimes:{
     ready(){
-      if (this.properties.isSame && this.data.showTime.totalTime ==="00:00"){
+      //因为onCanPlay只会执行一次
+      if (this.properties.isSame && this.data.showTime.totalTime === "00:00"){
         this._setTime()
       }
       //组件在页面布局完成以后去执行，得在dom渲染完成以后再去获取dom节点的一些信息
       this._getMovavleDis()
+      console.log(1111111111111111111111111111111111)
       this._bindBGMEvent()
     },
   },
@@ -82,6 +84,7 @@ Component({
       }),
       backgroundAudioManager.onCanplay(()=>{
         console.log('onCanplay') //监听的音乐进入到一个可以播放的状态,这时候获取时长
+        console.log(222222222222222222222222222222222222222)
         console.log(backgroundAudioManager.duration) //获取到是个概率事件，有时会undefined,但是等一秒好像又能获取到
         if (typeof backgroundAudioManager.duration!=="undefined"){
           this._setTime()

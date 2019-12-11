@@ -25,7 +25,10 @@ Page({
   onLoad: function (options) {
     musicList = wx.getStorageSync("musicList")
     nowPlayingIndex = parseInt(options.index)
-    this._loadMusicDetail(options.musicId)
+    this._loadMusicDetail(parseInt(options.musicId))
+    if (this.data.isSame) {
+      this.togglePlaying()
+    }
   },
 
   _loadMusicDetail(musicId){
@@ -64,7 +67,7 @@ Page({
         console.log(JSON.parse(res.result))
         let result = JSON.parse(res.result)
         if(!this.data.isSame){
-          backgroundAudioManager.src=result.data[0].url
+          backgroundAudioManager.src=result.data[0].url //不重新设置src，歌曲不会从头播放
           backgroundAudioManager.title = music.name
           backgroundAudioManager.coverImgUrl = music.al.picUrl
           backgroundAudioManager.singer = music.ar[0].name
