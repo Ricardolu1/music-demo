@@ -66,6 +66,12 @@ Page({
     }).then(res=>{
         console.log(JSON.parse(res.result))
         let result = JSON.parse(res.result)
+        if(result.data[0].url===null){ //有些vip歌曲我们是没有权限的
+          wx.showToast({
+            title: '无权限播放',
+          })
+          return
+        }
         if(!this.data.isSame){
           backgroundAudioManager.src=result.data[0].url //不重新设置src，歌曲不会从头播放
           backgroundAudioManager.title = music.name
